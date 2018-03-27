@@ -33,7 +33,7 @@
     <artifactId>event-client-dmaap</artifactId>
 
     <properties>
-        <common.logging.version>1.2.0</common.logging.version>
+        <common.logging.version>1.2.2</common.logging.version>
         <dmaap.client.version>1.0.0</dmaap.client.version>
     </properties>
 
@@ -58,6 +58,12 @@
             <groupId>org.onap.aai.event-client</groupId>
             <artifactId>event-client-api</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
