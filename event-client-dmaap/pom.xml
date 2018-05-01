@@ -34,7 +34,7 @@
 
     <properties>
         <common.logging.version>1.2.2</common.logging.version>
-        <dmaap.client.version>1.0.0</dmaap.client.version>
+        <dmaap.client.version>1.1.6</dmaap.client.version>
     </properties>
 
     <dependencies>
