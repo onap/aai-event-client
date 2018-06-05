@@ -47,6 +47,7 @@
         <module>event-client-api</module>
         <module>event-client-dmaap</module>
         <module>event-client-kafka</module>
+        <module>event-client-rabbitmq</module>
     </modules>
 
     <dependencies>
