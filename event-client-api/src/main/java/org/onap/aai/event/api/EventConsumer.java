@@ -62,4 +62,10 @@ public interface EventConsumer {
      * @throws Exception if the offsets could not be committed
      */
     public void commitOffsets(long offset) throws Exception;
+    
+    /**
+     * Closes the consumer
+     * @throws Exception
+     */
+    default void close() throws Exception {}
 }
