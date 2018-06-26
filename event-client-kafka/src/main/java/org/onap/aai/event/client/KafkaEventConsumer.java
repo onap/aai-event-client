@@ -49,6 +49,7 @@ public class KafkaEventConsumer implements EventConsumer {
 
     private static Logger log = LoggerFactory.getInstance().getLogger(KafkaEventConsumer.class);
 
+    @FunctionalInterface
     public interface KafkaConsumerFactory {
         public KafkaConsumer<String, String> createConsumer(Properties props);
     }
@@ -56,15 +57,6 @@ public class KafkaEventConsumer implements EventConsumer {
     private static KafkaConsumerFactory consumerFactory = KafkaConsumer::new;
 
     private final KafkaConsumer<String, String> consumer;
-
-    /**
-     * Replace the consumer factory (intended to be used for testing purposes only).
-     * 
-     * @param consumerFactory
-     */
-    static void setConsumerFactory(KafkaConsumerFactory consumerFactory) {
-        KafkaEventConsumer.consumerFactory = consumerFactory;
-    }
 
     /**
      *
@@ -89,6 +81,16 @@ public class KafkaEventConsumer implements EventConsumer {
         consumer.subscribe(Arrays.asList(topic));
     }
 
+    /**
+     * Replace the consumer factory (intended to be used for testing purposes only).
+     * 
+     * @param consumerFactory
+     */
+    static void setConsumerFactory(KafkaConsumerFactory consumerFactory) {
+        KafkaEventConsumer.consumerFactory = consumerFactory;
+    }
+
+    @Override
     public void close() {
         consumer.close();
     }
