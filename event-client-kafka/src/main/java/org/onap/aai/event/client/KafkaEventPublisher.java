@@ -42,6 +42,7 @@ public class KafkaEventPublisher implements EventPublisher {
 
     private static Logger log = LoggerFactory.getInstance().getLogger(KafkaEventPublisher.class);
 
+    @FunctionalInterface
     public interface KafkaProducerFactory {
         public KafkaProducer<String, String> createProducer(Properties props);
     }
@@ -52,15 +53,6 @@ public class KafkaEventPublisher implements EventPublisher {
 
     private final KafkaProducer<String, String> producer;
     private final String topic;
-
-    /**
-     * Replace the producer factory (intended to be used for testing purposes only).
-     * 
-     * @param producerFactory
-     */
-    static void setProducerFactory(KafkaProducerFactory producerFactory) {
-        KafkaEventPublisher.producerFactory = producerFactory;
-    }
 
     /**
      *
@@ -106,6 +98,15 @@ public class KafkaEventPublisher implements EventPublisher {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         producer = producerFactory.createProducer(props);
         this.topic = topic;
+    }
+
+    /**
+     * Replace the producer factory (intended to be used for testing purposes only).
+     *
+     * @param producerFactory
+     */
+    static void setProducerFactory(KafkaProducerFactory producerFactory) {
+        KafkaEventPublisher.producerFactory = producerFactory;
     }
 
     /**
