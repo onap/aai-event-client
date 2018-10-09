@@ -1,0 +1,7 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Steven Blimkie <Steven.Blimkie@amdocs.com>
+Submitted-by: Steven Blimkie <Steven.Blimkie@amdocs.com>
+Submitted-at: Tue, 09 Oct 2018 16:19:58 +0000
+Reviewed-on: https://gerrit.onap.org/r/70085
+Project: aai/event-client
+Branch: refs/heads/master
