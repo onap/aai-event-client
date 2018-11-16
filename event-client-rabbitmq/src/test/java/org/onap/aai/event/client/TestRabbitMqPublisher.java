@@ -55,69 +55,59 @@ public class TestRabbitMqPublisher {
 
     BuiltinExchangeType topicEx = BuiltinExchangeType.TOPIC;
     Map<String, Integer> hostPortMap = new HashMap<String, Integer>();
+    RabbitMqClientConfig config1 = new RabbitMqClientConfig();
+    RabbitMqClientConfig config2 = new RabbitMqClientConfig();
+    RabbitMqClientConfig config3 = new RabbitMqClientConfig();
 
     @Before
     public void init() throws Exception {
-    	RabbitMqEventPublisher.setConnectionFactory(mockConnectionFactory);
+        RabbitMqUtils.setConnectionFactory(mockConnectionFactory);
+        
+        config1.setHosts("host1:1234");
+        config1.setUsername("user");
+        config1.setPassword("secret");
+        config1.setExchangeName("my-exchange");
+        
+        config2.setHosts("host1:1234");
+        config2.setUsername("user");
+        config2.setPassword("secret");
+        config2.setExchangeName("my-exchange");
+        config2.setExchangeType(BuiltinExchangeType.DIRECT.name());
     }
 
     @Test
     public void testConstructors() throws Exception {
-    	Mockito.when(mockConnectionFactory.newConnection(Mockito.anyListOf(Address.class))).thenReturn(mockConnection);
-    	Mockito.when(mockConnection.createChannel()).thenReturn(mockChannel);
-       Mockito.when(mockChannel.exchangeDeclare(Mockito.any(), Mockito.eq(topicEx), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyMap())).thenReturn(mockDeclareOK);
-        new RabbitMqEventPublisher("hosts", 0, "userName", "password", "exchangeName");
-        new RabbitMqEventPublisher("hosts", 0, "userName", "password", BuiltinExchangeType.DIRECT.name(), "exchangeName");
-        new RabbitMqEventPublisher(hostPortMap, "userName", "password", "exchangeName");
-        new RabbitMqEventPublisher(hostPortMap, "userName", "password", BuiltinExchangeType.DIRECT.name(), "exchangeName");
-        new RabbitMqEventPublisher("hosts", 0, "userName", "password", "queueName",new HashMap<String, Object>());
+        Mockito.when(mockConnectionFactory.newConnection(Mockito.anyListOf(Address.class))).thenReturn(mockConnection);
+        Mockito.when(mockConnection.createChannel()).thenReturn(mockChannel);
+        Mockito.when(mockChannel.exchangeDeclare(Mockito.any(), Mockito.eq(topicEx), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyMap())).thenReturn(mockDeclareOK);
+        new RabbitMqEventPublisher(config1);
+        new RabbitMqEventPublisher(config2);
     }
-    
+
 
     @Test
     public void publishSynchronous() throws Exception {
-    	Mockito.when(mockConnectionFactory.newConnection(Mockito.anyListOf(Address.class))).thenReturn(mockConnection);
-    	Mockito.when(mockConnection.createChannel()).thenReturn(mockChannel);
-       	Mockito.when(mockChannel.exchangeDeclare(Mockito.any(), Mockito.eq(topicEx), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyMap())).thenReturn(mockDeclareOK);
-       	RabbitMqEventPublisher publisher = new RabbitMqEventPublisher("hosts", 0, "userName", "password", "exchangeName");
-       	publisher.sendSync("");
-       	publisher.sendSync(Arrays.asList(""));
-       	publisher.sendSync("key", "");
+        Mockito.when(mockConnectionFactory.newConnection(Mockito.anyListOf(Address.class))).thenReturn(mockConnection);
+        Mockito.when(mockConnection.createChannel()).thenReturn(mockChannel);
+        Mockito.when(mockChannel.exchangeDeclare(Mockito.any(), Mockito.eq(topicEx), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyMap())).thenReturn(mockDeclareOK);
+        RabbitMqEventPublisher publisher = new RabbitMqEventPublisher(config1);
+        publisher.sendSync("");
+        publisher.sendSync(Arrays.asList(""));
+        publisher.sendSync("key", "");
         publisher.sendSync("key", Arrays.asList(""));
         publisher.close();
     }
 
     @Test
     public void publishAsynchronous() throws Exception {
-    	Mockito.when(mockConnectionFactory.newConnection(Mockito.anyListOf(Address.class))).thenReturn(mockConnection);
-    	Mockito.when(mockConnection.createChannel()).thenReturn(mockChannel);
-    	Mockito.when(mockChannel.exchangeDeclare(Mockito.any(), Mockito.eq(topicEx), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyMap())).thenReturn(mockDeclareOK);
-    	RabbitMqEventPublisher publisher = new RabbitMqEventPublisher("hosts", 0, "userName", "password", "exchangeName");
-    	publisher.sendAsync("");
-    	publisher.sendAsync(Arrays.asList(""));
-    	publisher.sendAsync("key", "");
-    	publisher.sendAsync("key", Arrays.asList(""));
-    	publisher.close();
+        Mockito.when(mockConnectionFactory.newConnection(Mockito.anyListOf(Address.class))).thenReturn(mockConnection);
+        Mockito.when(mockConnection.createChannel()).thenReturn(mockChannel);
+        Mockito.when(mockChannel.exchangeDeclare(Mockito.any(), Mockito.eq(topicEx), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyMap())).thenReturn(mockDeclareOK);
+        RabbitMqEventPublisher publisher = new RabbitMqEventPublisher(config1);
+        publisher.sendAsync("");
+        publisher.sendAsync(Arrays.asList(""));
+        publisher.sendAsync("key", "");
+        publisher.sendAsync("key", Arrays.asList(""));
+        publisher.close();
     }
-    @Test(expected = UnsupportedOperationException.class)
-    public void UnsupportedMessageTest() throws Exception {
-    	Mockito.when(mockConnectionFactory.newConnection(Mockito.anyListOf(Address.class))).thenReturn(mockConnection);
-    	Mockito.when(mockConnection.createChannel()).thenReturn(mockChannel);
-    	Mockito.when(mockChannel.exchangeDeclare(Mockito.any(), Mockito.eq(topicEx), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyMap())).thenReturn(mockDeclareOK);
-    	RabbitMqEventPublisher publisher = new RabbitMqEventPublisher("hosts", 0, "userName", "password", "queueName",new HashMap<String, Object>());
-    	publisher.sendSync("key", "");
-    	publisher.sendSync("key", Arrays.asList(""));
-    	publisher.close();
-    }
-    
-    @Test(expected = UnsupportedOperationException.class)
-    public void UnSupportedMultiMessageTests() throws Exception {
-    	Mockito.when(mockConnectionFactory.newConnection(Mockito.anyListOf(Address.class))).thenReturn(mockConnection);
-    	Mockito.when(mockConnection.createChannel()).thenReturn(mockChannel);
-    	Mockito.when(mockChannel.exchangeDeclare(Mockito.any(), Mockito.eq(topicEx), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyMap())).thenReturn(mockDeclareOK);
-    	RabbitMqEventPublisher publisher = new RabbitMqEventPublisher("hosts", 0, "userName", "password", "queueName",new HashMap<String, Object>());
-    	publisher.sendSync("key", Arrays.asList(""));
-    	publisher.close();
-    }
-    
 }

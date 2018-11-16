@@ -65,10 +65,33 @@ public class TestRabbitMqConsumer {
     BuiltinExchangeType topicEx = BuiltinExchangeType.TOPIC;
     TimeUnit unit = TimeUnit.MILLISECONDS;
     Map<String, Integer> hostPortMap = new HashMap<String, Integer>();
+    
+    RabbitMqClientConfig config1 = new RabbitMqClientConfig();
+    RabbitMqClientConfig config2 = new RabbitMqClientConfig();
+    RabbitMqClientConfig config3 = new RabbitMqClientConfig();
+    
 
     @Before
     public void init() throws Exception {
-    	RabbitMqEventConsumer.setConnectionFactory(mockConnectionFactory);
+    	RabbitMqUtils.setConnectionFactory(mockConnectionFactory);
+    	
+    	config1.setHosts("host1:1234");
+    	config1.setUsername("user");
+    	config1.setPassword("secret");
+    	config1.setExchangeName("my-exchange");
+    	config1.setQueue("my-queue");
+    	
+    	config2.setHosts("host1:1234");
+        config2.setUsername("user");
+        config2.setPassword("secret");
+        config2.setExchangeName("my-exchange");
+        config2.setExchangeType(BuiltinExchangeType.DIRECT.name());
+        config2.setQueue("my-queue");
+        
+        config3.setHosts("host1:1234,host2:5678");
+        config3.setUsername("user");
+        config3.setPassword("secret");
+        config3.setQueue("my-queue");
     }
 
     @Test
@@ -77,11 +100,9 @@ public class TestRabbitMqConsumer {
         Mockito.when(mockConnection.createChannel()).thenReturn(mockChannel);
        	Mockito.when(mockChannel.exchangeDeclare(Mockito.any(), Mockito.eq(topicEx), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyMap())).thenReturn(mockDeclareOK);
        	Mockito.when(mockChannel.basicConsume(Mockito.any(), Mockito.anyBoolean(), Mockito.any(Consumer.class))).thenReturn(Mockito.anyString());
-        new RabbitMqEventConsumer("hosts", 0, "userName", "password", "exchangeName", "queueName");
-        new RabbitMqEventConsumer("hosts", 0, "userName", "password", BuiltinExchangeType.DIRECT.name(), "exchangeName", "queueName");
-        new RabbitMqEventConsumer(hostPortMap, "userName", "password", "exchangeName", "queueName");
-        new RabbitMqEventConsumer(hostPortMap, "userName", "password", BuiltinExchangeType.DIRECT.name(), "exchangeName", "queueName");
-        new RabbitMqEventConsumer("hosts", 0, "userName", "password", "queue");
+        new RabbitMqEventConsumer(config1);
+        new RabbitMqEventConsumer(config2);
+        new RabbitMqEventConsumer(config3);
     }
 
     @Test
@@ -90,7 +111,7 @@ public class TestRabbitMqConsumer {
        	Mockito.when(mockConnection.createChannel()).thenReturn(mockChannel);
        	Mockito.when(mockChannel.exchangeDeclare(Mockito.any(), Mockito.eq(topicEx), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyMap())).thenReturn(mockDeclareOK);
        	Mockito.when(mockChannel.basicConsume(Mockito.any(), Mockito.anyBoolean(), Mockito.any(Consumer.class))).thenReturn(Mockito.anyString());
-       	RabbitMqEventConsumer consumer = new RabbitMqEventConsumer("hosts", 0, "userName", "password", "exchangeName", "queueName");
+       	RabbitMqEventConsumer consumer = new RabbitMqEventConsumer(config1);
         consumer.consume();
         consumer.consumeWithOffsets();
         consumer.consumeAndCommit();
@@ -103,7 +124,7 @@ public class TestRabbitMqConsumer {
        	Mockito.when(mockConnection.createChannel()).thenReturn(mockChannel);
        	Mockito.when(mockChannel.exchangeDeclare(Mockito.any(), Mockito.eq(topicEx), Mockito.anyBoolean(), Mockito.anyBoolean(), Mockito.anyMap())).thenReturn(mockDeclareOK);
        	Mockito.when(mockChannel.basicConsume(Mockito.any(), Mockito.anyBoolean(), Mockito.any(Consumer.class))).thenReturn(Mockito.anyString());
-       	RabbitMqEventConsumer consumer = new RabbitMqEventConsumer("hosts", 0, "userName", "password", "exchangeName", "queueName");
+       	RabbitMqEventConsumer consumer = new RabbitMqEventConsumer(config1);
        	consumer.commitOffsets();
         consumer.commitOffsets(0L);
         consumer.close();
@@ -118,7 +139,7 @@ public class TestRabbitMqConsumer {
        	List<MessageWithOffset> records = buildTestMessages(2);
        	mqueue = new ArrayBlockingQueue<>(2);
        	mqueue.addAll(records);
-       	RabbitMqEventConsumer consumer = new RabbitMqEventConsumer("hosts", 0, "userName", "password", "exchangeName", "queueName");
+       	RabbitMqEventConsumer consumer = new RabbitMqEventConsumer(config1);
        	consumer.setMessageQueue(mqueue);
        	consumer.consumeAndCommit();
        	consumer.close();
@@ -133,7 +154,7 @@ public class TestRabbitMqConsumer {
        	List<MessageWithOffset> records = buildTestMessages(2);
        	mqueue = new ArrayBlockingQueue<>(2);
        	mqueue.addAll(records);
-       	RabbitMqEventConsumer consumer = new RabbitMqEventConsumer("hosts", 0, "userName", "password", "exchangeName", "queueName");
+       	RabbitMqEventConsumer consumer = new RabbitMqEventConsumer(config1);
        	consumer.setMessageQueue(mqueue);
        	consumer.consumeWithOffsets();
        	consumer.commitOffsets();
