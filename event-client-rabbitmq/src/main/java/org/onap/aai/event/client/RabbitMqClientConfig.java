@@ -29,6 +29,7 @@ import com.rabbitmq.client.BuiltinExchangeType;
 public class RabbitMqClientConfig {
     
     private static String BINDING_CONSUME_ALL = "#";
+    private static Integer DEFAULT_RETRY_INTERVAL = 15000;
 
     private String hosts;
     private String username;
@@ -46,6 +47,7 @@ public class RabbitMqClientConfig {
     private String sslKeyStorePassword;
     private String sslTrustStorePassword;
     private String connectionTimeout;
+    private Integer retryInterval;
     private String enableSsl;
     
     public String getUsername() {
@@ -181,6 +183,18 @@ public class RabbitMqClientConfig {
         this.connectionTimeout = connectionTimeout;
     }
 
+    public Integer getRetryInterval() {
+        if (retryInterval == null) {
+           return DEFAULT_RETRY_INTERVAL;
+        }
+        
+        return retryInterval;
+    }
+    
+    public void setRetryInterval(Integer retryInterval) {
+        this.retryInterval = retryInterval;
+    }
+    
     public Boolean getEnableSsl() {
         if (enableSsl != null) {
             return Boolean.valueOf(enableSsl);
