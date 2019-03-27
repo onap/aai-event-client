@@ -27,7 +27,7 @@
     <parent>
         <groupId>org.onap.aai.event-client</groupId>
         <artifactId>event-client</artifactId>
-        <version>1.4.0-SNAPSHOT</version>
+        <version>1.4.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>event-client-api</artifactId>
