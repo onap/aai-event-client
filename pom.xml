@@ -46,7 +46,7 @@
         <!-- Minimum code coverage percentage. Please update this figure as coverage increases to prevent any drops in
          coverage caused by new changes. Note that this figure cannot be lower than the ONAP requirement of 0.55 -->
         <jacoco.line.coverage.limit>0.90</jacoco.line.coverage.limit>
-        <jacoco.report.directory>${project.build.directory}/coverage-reports</jacoco.report.directory>
+        <jacoco.report.directory>${project.build.directory}/code-coverage</jacoco.report.directory>
     </properties>
 
     <modules>
@@ -136,42 +136,14 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.9</version>
-                <configuration>
-                    <dumpOnExit>true</dumpOnExit>
-                </configuration>
                 <executions>
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                        <configuration>
-                            <destFile>${jacoco.report.directory}/jacoco.exec</destFile>
-                            <propertyName>surefireArgLine</propertyName>
-                            <!-- <append>true</append> -->
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
-                            <dataFile>${jacoco.report.directory}/jacoco.exec</dataFile>
-                            <!-- Sets the output directory for the code coverage report. -->
-                            <outputDirectory>${jacoco.report.directory}/jacoco</outputDirectory>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>default-check</id>
                         <goals>
                             <goal>check</goal>
                         </goals>
                         <configuration>
-                            <dataFile>${jacoco.report.directory}/jacoco.exec</dataFile>
+                            <dataFile>${jacoco.report.directory}/jacoco-ut.exec</dataFile>
                             <rules>
                                 <!--  implementation is needed only for Maven 2  -->
                                 <rule
