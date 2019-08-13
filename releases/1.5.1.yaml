@@ -1,0 +1,4 @@
+distribution_type: 'maven'
+version: '1.5.1'
+project: 'aai-event-client'
+log_dir: 'aai-event-client-maven-stage-elalto/28'
