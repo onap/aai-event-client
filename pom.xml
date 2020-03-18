@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.onap.aai.aai-common</groupId>
         <artifactId>aai-parent</artifactId>
-        <version>1.6.5</version>
+        <version>1.6.10</version>
     </parent>
 
     <groupId>org.onap.aai.event-client</groupId>
@@ -39,6 +39,7 @@
     <packaging>pom</packaging>
 
     <properties>
+        <aai.common.version>1.6.10</aai.common.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
