@@ -1,0 +1,4 @@
+distribution_type: maven
+log_dir: aai-event-client-maven-stage-master/264/
+project: event-client
+version: 1.6.4
