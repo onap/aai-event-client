@@ -28,7 +28,7 @@
     <parent>
         <groupId>org.onap.aai.event-client</groupId>
         <artifactId>event-client</artifactId>
-        <version>1.6.4-SNAPSHOT</version>
+        <version>1.6.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>event-client-dmaap</artifactId>
