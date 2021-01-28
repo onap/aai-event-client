@@ -41,8 +41,7 @@
     <properties>
         <aai.common.version>1.6.10</aai.common.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.release>11</maven.compiler.release>
         <sitePath>/content/sites/site/org/onap/aai/${project.artifactId}/${project.version}</sitePath>
         <!-- Minimum code coverage percentage. Please update this figure as coverage increases to prevent any drops in
          coverage caused by new changes. Note that this figure cannot be lower than the ONAP requirement of 0.55 -->
@@ -72,8 +71,7 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <source>${maven.compiler.source}</source>
-                        <target>${maven.compiler.target}</target>
+                        <release>${maven.compiler.release}</release>
                     </configuration>
                 </plugin>
                 <plugin>
